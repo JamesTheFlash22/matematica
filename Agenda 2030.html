@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda 2030</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f0f4f1;
+            font-family: 'Open Sans', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .presentation-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #fff;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .slide-container {
+            flex-grow: 1;
+            width: 100%;
+            height: calc(100% - 80px);
+            display: none;
+            padding: 40px 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide-container.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: #1b5e20;
+            margin-bottom: 25px;
+            border-left: 8px solid #81c784;
+            padding-left: 20px;
+        }
+
+        .content-area {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .title-layout {
+            background: linear-gradient(135deg, #1b5e20 0%, #388e3c 100%);
+            color: white;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .title-layout h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 64px;
+            margin: 0;
+        }
+
+        .title-layout p {
+            font-size: 22px;
+            margin-top: 15px;
+            opacity: 0.9;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .tiled-content {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .tile {
+            flex: 1;
+            background-color: #f9fbf9;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tile .icon {
+            font-size: 36px;
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+
+        .tile h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 20px;
+            margin: 0 0 10px 0;
+            color: #1b5e20;
+        }
+
+        .tile p {
+            font-size: 14px;
+            line-height: 1.4;
+            color: #455a64;
+            margin: 0;
+        }
+
+        .table-layout {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-layout th, .table-layout td {
+            text-align: left;
+            padding: 12px 15px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 15px;
+        }
+
+        .table-layout th {
+            background-color: #e8f5e9;
+            color: #1b5e20;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+        }
+
+        .bullet-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .bullet-list li {
+            position: relative;
+            padding-left: 45px;
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: #37474f;
+        }
+
+        .bullet-list li i {
+            position: absolute;
+            left: 0;
+            top: 2px;
+            color: #2e7d32;
+            font-size: 22px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 20px;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .input-panel {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            height: 100%;
+        }
+
+        .question-group {
+            background: #f1f8f1;
+            padding: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #1b5e20;
+        }
+
+        .question-group h4 {
+            font-size: 11px;
+            color: #1b5e20;
+            margin: 0 0 6px 0;
+            text-transform: uppercase;
+        }
+
+        .input-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 4px;
+        }
+
+        .input-item label {
+            font-size: 11px;
+            color: #455a64;
+        }
+
+        .input-item input {
+            width: 55px;
+            padding: 3px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .charts-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 15px;
+            height: 100%;
+        }
+
+        .chart-box {
+            background: #fff;
+            border: 1px solid #f0f0f0;
+            border-radius: 12px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .chart-box h5 {
+            margin: 0 0 5px 0;
+            font-size: 12px;
+            color: #37474f;
+            text-align: center;
+        }
+
+        .canvas-wrapper {
+            position: relative;
+            width: 100%;
+            height: 170px;
+        }
+
+        .navigation-footer {
+            height: 80px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        .nav-btn {
+            background-color: #1b5e20;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+        }
+
+        .nav-btn:hover {
+            background-color: #2e7d32;
+        }
+
+        .nav-btn:disabled {
+            background-color: #b0bec5;
+            cursor: not-allowed;
+        }
+
+        .progress-indicator {
+            display: flex;
+            gap: 10px;
+        }
+
+        .progress-dot {
+            width: 12px;
+            height: 12px;
+            background-color: #cfd8dc;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .progress-dot.active {
+            background-color: #1b5e20;
+            transform: scale(1.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="presentation-container">
+        
+        <div class="slide-container title-layout active" id="slide1">
+            <h1>Agenda 2030</h1>
+            <p>Indagine Statistica Civica in Classe</p>
+            <div style="margin-top: 30px; font-size: 18px; color: #a5d6a7;">Educazione Civica</div>
+        </div>
+
+        <div class="slide-container" id="slide2">
+            <h2 class="slide-title">Cos'è l'Agenda 2030?</h2>
+            <div class="content-area">
+                <div class="two-column">
+                    <div>
+                        <p style="font-size: 18px; color: #546e7a; line-height: 1.6;">Sottoscritta nel 2015 da 193 Paesi membri dell'ONU, è un programma d'azione globale rivolto alle persone, al pianeta e alla prosperità economica.</p>
+                        <p style="font-size: 18px; color: #546e7a; margin-top: 15px; line-height: 1.6;">L'obiettivo strategico è guidare il mondo verso lo sviluppo sostenibile, bilanciando la crescita, l'inclusione sociale e la salvaguardia dell'ambiente.</p>
+                        <div style="margin-top: 25px; display: flex; gap: 20px;">
+                            <div style="background: #e8f5e9; padding: 15px; border-radius: 8px; flex: 1; text-align: center;">
+                                <strong style="color: #1b5e20; font-size: 24px;">17</strong>
+                                <p style="font-size: 13px; margin: 5px 0 0 0; font-weight: 600;">Obiettivi Globali (SDGs)</p>
+                            </div>
+                            <div style="background: #e8f5e9; padding: 15px; border-radius: 8px; flex: 1; text-align: center;">
+                                <strong style="color: #1b5e20; font-size: 24px;">169</strong>
+                                <p style="font-size: 13px; margin: 5px 0 0 0; font-weight: 600;">Traguardi Specifici</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="background-color: #e8f5e9; height: 320px; border-radius: 12px; display: flex; justify-content: center; align-items: center;">
+                        <i class="fa-solid fa-globe" style="font-size: 140px; color: #2e7d32;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide-container" id="slide3">
+            <h2 class="slide-title">Le Macroaree della Sostenibilità</h2>
+            <div class="content-area">
+                <div class="tiled-content">
+                    <div class="tile">
+                        <div class="icon"><i class="fa-solid fa-users"></i></div>
+                        <h3>Persone</h3>
+                        <p>Eliminare fame e povertà in ogni forma, garantendo dignità, salute e uguaglianza per tutti.</p>
+                    </div>
+                    <div class="tile">
+                        <div class="icon"><i class="fa-solid fa-earth-americas"></i></div>
+                        <h3>Pianeta</h3>
+                        <p>Proteggere attivamente las risorse naturali, gli ecosistemi terrestri, marini e il clima globale.</p>
+                    </div>
+                </div>
+                <div class="tiled-content" style="margin-top: 20px;">
+                    <div class="tile">
+                        <div class="icon"><i class="fa-solid fa-chart-line"></i></div>
+                        <h3>Prosperità</h3>
+                        <p>Assicurare vite soddisfacenti e un progresso economico e tecnologico in armonia con la natura.</p>
+                    </div>
+                    <div class="tile">
+                        <div class="icon"><i class="fa-solid fa-dove"></i></div>
+                        <h3>Pace</h3>
+                        <p>Promuovere attivamente società pacifiche, giuste, inclusive e prive di timori o violenze.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide-container" id="slide4">
+            <h2 class="slide-title">L'Italia e la Sostenibilità</h2>
+            <div class="content-area">
+                <p style="margin-bottom: 20px; font-size: 16px; color: #546e7a;">I dati statistici nazionali mostrano l'andamento del nostro Paese verso il raggiungimento dei target prefissati.</p>
+                <table class="table-layout">
+                    <thead>
+                        <tr>
+                            <th>Macroarea di Riferimento</th>
+                            <th>Stato di Avanzamento</th>
+                            <th>Indicatore Principale</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Economia Circolare e Riciclo</td>
+                            <td style="color: #2e7d32; font-weight: 600;"><i class="fa-solid fa-circle-up"></i> In miglioramento</td>
+                            <td>Leader in Europa per tasso di riciclo dei rifiuti.</td>
+                        </tr>
+                        <tr>
+                            <td>Lotta alle Disuguaglianze</td>
+                            <td style="color: #c62828; font-weight: 600;"><i class="fa-solid fa-circle-down"></i> In peggioramento</td>
+                            <td>Aumento della fascia di povertà assoluta.</td>
+                        </tr>
+                        <tr>
+                            <td>Azione per il Clima</td>
+                            <td style="color: #f9a825; font-weight: 600;"><i class="fa-solid fa-circle"></i> Stagnante</td>
+                            <td>Rinnovabili in crescita ma rallentate dalla burocrazia.</td>
+                        </tr>
+                        <tr>
+                            <td>Istruzione e Formazione</td>
+                            <td style="color: #c62828; font-weight: 600;"><i class="fa-solid fa-circle-down"></i> Critico</td>
+                            <td>Tasso di abbandono scolastico superior alla media UE.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="slide-container" id="slide5">
+            <h2 class="slide-title">Struttura dell'Indagine</h2>
+            <div class="content-area">
+                <p style="margin-bottom: 30px; font-size: 18px; color: #455a64;">Abbiamo elaborato un questionario strutturato su 4 domande specifiche per raccogliere i dati statistici della classe:</p>
+                <ul class="bullet-list">
+                    <li><i class="fa-solid fa-circle-question"></i> <strong>Domanda 1:</strong> Pensi che la lotta al cambiamento stia funzionando o no?</li>
+                    <li><i class="fa-solid fa-circle-question"></i> <strong>Domanda 2:</strong> Quanti obiettivi pensi che l'Italia riesca a completare entro il 2030?</li>
+                    <li><i class="fa-solid fa-circle-question"></i> <strong>Domanda 3:</strong> Sei a conoscenza degli obiettivi dell'agenda 2030?</li>
+                    <li><i class="fa-solid fa-circle-question"></i> <strong>Domanda 4:</strong> Quale tra le macroareas dell'agenda 2030 pensi sia più importante?</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide-container" id="slide6">
+            <h2 class="slide-title">Dashboard di Votazione Live</h2>
+            <div class="content-area">
+                <div class="dashboard-grid">
+                    <div class="input-panel">
+                        <div class="question-group">
+                            <h4>1. Lotta al Cambiamento</h4>
+                            <div class="input-item"><label>Sì, funziona:</label><input type="number" id="q1-si" value="0" oninput="updateAll()"></div>
+                            <div class="input-item"><label>No, non funziona:</label><input type="number" id="q1-no" value="0" oninput="updateAll()"></div>
+                        </div>
+                        <div class="question-group" style="border-left-color: #ffb300;">
+                            <h4>2. Target Completati Italia</h4>
+                            <div class="input-item"><label>Pochi (0-5):</label><input type="number" id="q2-low" value="0" oninput="updateAll()"></div>
+                            <div class="input-item"><label>Medi (6-11):</label><input type="number" id="q2-mid" value="0" oninput="updateAll()"></div>
+                            <div class="input-item"><label>Tanti (12-17):</label><input type="number" id="q2-high" value="0" oninput="updateAll()"></div>
+                        </div>
+                        <div class="question-group" style="border-left-color: #03a9f4;">
+                            <h4>3. Conoscenza Agenda</h4>
+                            <div class="input-item"><label>Sì, li conosco:</label><input type="number" id="q3-si" value="0" oninput="updateAll()"></div>
+                            <div class="input-item"><label>No, non li conosco:</label><input type="number" id="q3-no" value="0" oninput="updateAll()"></div>
+                        </div>
+                        <div class="question-group" style="border-left-color: #9c27b0;">
+                            <h4>4. Macroarea più Importante</h4>
+                            <div class="input-item"><label>Persone:</label><input type="number" id="q4-per" value="0" oninput="updateAll()"></div>
+                            <div class="input-item"><label>Pianeta:</label><input type="number" id="q4-pia" value="0" oninput="updateAll()"></div>
+                            <div class="input-item"><label>Prosperità:</label><input type="number" id="q4-pro" value="0" oninput="updateAll()"></div>
+                            <div class="input-item"><label>Pace:</label><input type="number" id="q4-pac" value="0" oninput="updateAll()"></div>
+                        </div>
+                    </div>
+                    <div class="charts-container">
+                        <div class="chart-box">
+                            <h5>La lotta funziona? (D1)</h5>
+                            <div class="canvas-wrapper"><canvas id="chart1"></canvas></div>
+                        </div>
+                        <div class="chart-box">
+                            <h5>Obiettivi Italia al 2030 (D2)</h5>
+                            <div class="canvas-wrapper"><canvas id="chart2"></canvas></div>
+                        </div>
+                        <div class="chart-box">
+                            <h5>Conoscenza dei Goal (D3)</h5>
+                            <div class="canvas-wrapper"><canvas id="chart3"></canvas></div>
+                        </div>
+                        <div class="chart-box">
+                            <h5>Priorità delle Macroaree (D4)</h5>
+                            <div class="canvas-wrapper"><canvas id="chart4"></canvas></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide-container title-layout" id="slide7">
+            <h1>Conclusioni</h1>
+            <p>Grazie per l'attenzione e per aver partecipato alla raccolta dati</p>
+            <div style="margin-top: 30px; font-size: 36px; color: #fff;"><i class="fa-solid fa-seedling"></i></div>
+        </div>
+
+        <div class="navigation-footer">
+            <button class="nav-btn" id="prevBtn" onclick="navigateSlide(-1)" disabled><i class="fa-solid fa-arrow-left"></i> Precedente</button>
+            <div class="progress-indicator" id="dotsContainer"></div>
+            <button class="nav-btn" id="nextBtn" onclick="navigateSlide(1)">Successiva <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 7;
+
+        const dotsContainer = document.getElementById('dotsContainer');
+        for (let i = 1; i <= totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.className = `progress-dot ${i === 1 ? 'active' : ''}`;
+            dot.id = `dot-${i}`;
+            dotsContainer.appendChild(dot);
+        }
+
+        function navigateSlide(direction) {
+            document.getElementById(`slide${currentSlide}`).classList.remove('active');
+            document.getElementById(`dot-${currentSlide}`).classList.remove('active');
+            
+            currentSlide += direction;
+            
+            document.getElementById(`slide${currentSlide}`).classList.add('active');
+            document.getElementById(`dot-${currentSlide}`).classList.add('active');
+
+            document.getElementById('prevBtn').disabled = (currentSlide === 1);
+            document.getElementById('nextBtn').disabled = (currentSlide === totalSlides);
+        }
+
+        const chartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } }
+        };
+
+        const chart1 = new Chart(document.getElementById('chart1').getContext('2d'), {
+            type: 'pie',
+            data: { labels: ['Sì', 'No'], datasets: [{ data: [0, 0], backgroundColor: ['#2ecc71', '#e74c3c'] }] },
+            options: chartOptions
+        });
+
+        const chart2 = new Chart(document.getElementById('chart2').getContext('2d'), {
+            type: 'bar',
+            data: { labels: ['0-5', '6-11', '12-17'], datasets: [{ data: [0, 0, 0], backgroundColor: '#ffb300' }] },
+            options: { ...chartOptions, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+        });
+
+        const chart3 = new Chart(document.getElementById('chart3').getContext('2d'), {
+            type: 'doughnut',
+            data: { labels: ['Sì', 'No'], datasets: [{ data: [0, 0], backgroundColor: ['#03a9f4', '#b0bec5'] }] },
+            options: chartOptions
+        });
+
+        const chart4 = new Chart(document.getElementById('chart4').getContext('2d'), {
+            type: 'bar',
+            indexAxis: 'y',
+            data: { labels: ['Persone', 'Pianeta', 'Prosperità', 'Pace'], datasets: [{ data: [0, 0, 0, 0], backgroundColor: ['#e91e63', '#4caf50', '#ff9800', '#9c27b0'] }] },
+            options: { ...chartOptions, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+        });
+
+        function updateAll() {
+            chart1.data.datasets[0].data = [Number(document.getElementById('q1-si').value) || 0, Number(document.getElementById('q1-no').value) || 0];
+            chart1.update();
+
+            chart2.data.datasets[0].data = [Number(document.getElementById('q2-low').value) || 0, Number(document.getElementById('q2-mid').value) || 0, Number(document.getElementById('q2-high').value) || 0];
+            chart2.update();
+
+            chart3.data.datasets[0].data = [Number(document.getElementById('q3-si').value) || 0, Number(document.getElementById('q3-no').value) || 0];
+            chart3.update();
+
+            chart4.data.datasets[0].data = [
+                Number(document.getElementById('q4-per').value) || 0,
+                Number(document.getElementById('q4-pia').value) || 0,
+                Number(document.getElementById('q4-pro').value) || 0,
+                Number(document.getElementById('q4-pac').value) || 0
+            ];
+            chart4.update();
+        }
+    </script>
+</body>
+</html>
