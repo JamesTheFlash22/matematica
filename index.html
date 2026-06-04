@@ -207,16 +207,6 @@
                     <div>
                         <p style="font-size: 18px; color: #546e7a; line-height: 1.6;">Sottoscritta nel 2015 da 193 Paesi membri dell'ONU, è un programma d'azione globale rivolto alle persone, al pianeta e alla prosperità economica.</p>
                         <p style="font-size: 18px; color: #546e7a; margin-top: 15px; line-height: 1.6;">L'obiettivo strategico è guidare il mondo verso lo sviluppo sostenibile, bilanciando la crescita, l'inclusione sociale e la salvaguardia dell'ambiente.</p>
-                        <div style="margin-top: 25px; display: flex; gap: 20px;">
-                            <div style="background: #e8f5e9; padding: 15px; border-radius: 8px; flex: 1; text-align: center;">
-                                <strong style="color: #1b5e20; font-size: 24px;">17</strong>
-                                <p style="font-size: 13px; margin: 5px 0 0 0; font-weight: 600;">Obiettivi Globali (SDGs)</p>
-                            </div>
-                            <div style="background: #e8f5e9; padding: 15px; border-radius: 8px; flex: 1; text-align: center;">
-                                <strong style="color: #1b5e20; font-size: 24px;">169</strong>
-                                <p style="font-size: 13px; margin: 5px 0 0 0; font-weight: 600;">Traguardi Specifici</p>
-                            </div>
-                        </div>
                     </div>
                     <div style="background-color: #e8f5e9; height: 320px; border-radius: 12px; display: flex; justify-content: center; align-items: center;">
                         <i class="fa-solid fa-globe" style="font-size: 140px; color: #2e7d32;"></i>
@@ -306,7 +296,6 @@
             </div>
         </div>
 
-        <!-- DASHBOARD CON GRAFICI GRANDI -->
         <div class="slide-container" id="slide6">
             <h2 class="slide-title">Dashboard di Votazione Live</h2>
             <div class="content-area" style="padding: 20px 40px 40px;">
@@ -346,6 +335,21 @@
     </div>
 
     <script>
+        // === DATI AGGIORNATI DAL TUO FILE CSV ===
+        const dati = {
+            q1si: 8,
+            q1no: 10,
+            q2low: 11,
+            q2mid: 4,
+            q2high: 2,
+            q3si: 14,
+            q3no: 4,
+            q4per: 1,
+            q4pia: 6,
+            q4pro: 3,
+            q4pac: 8
+        };
+
         let currentSlide = 1;
         const totalSlides = 7;
 
@@ -378,88 +382,30 @@
             plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } }
         };
 
-        const chart1 = new Chart(document.getElementById('chart1').getContext('2d'), {
+        new Chart(document.getElementById('chart1').getContext('2d'), {
             type: 'pie',
-            data: { labels: ['Sì', 'No'], datasets: [{ data: [0, 0], backgroundColor: ['#2ecc71', '#e74c3c'] }] },
+            data: { labels: ['Sì', 'No'], datasets: [{ data: [dati.q1si, dati.q1no], backgroundColor: ['#2ecc71', '#e74c3c'] }] },
             options: chartOptions
         });
 
-        const chart2 = new Chart(document.getElementById('chart2').getContext('2d'), {
+        new Chart(document.getElementById('chart2').getContext('2d'), {
             type: 'bar',
-            data: { labels: ['0-5', '6-11', '12-17'], datasets: [{ data: [0, 0, 0], backgroundColor: '#ffb300' }] },
+            data: { labels: ['0-5', '6-11', '12-17'], datasets: [{ data: [dati.q2low, dati.q2mid, dati.q2high], backgroundColor: '#ffb300' }] },
             options: { ...chartOptions, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
         });
 
-        const chart3 = new Chart(document.getElementById('chart3').getContext('2d'), {
+        new Chart(document.getElementById('chart3').getContext('2d'), {
             type: 'doughnut',
-            data: { labels: ['Sì', 'No'], datasets: [{ data: [0, 0], backgroundColor: ['#03a9f4', '#b0bec5'] }] },
+            data: { labels: ['Sì', 'No'], datasets: [{ data: [dati.q3si, dati.q3no], backgroundColor: ['#03a9f4', '#b0bec5'] }] },
             options: chartOptions
         });
 
-        const chart4 = new Chart(document.getElementById('chart4').getContext('2d'), {
+        new Chart(document.getElementById('chart4').getContext('2d'), {
             type: 'bar',
             indexAxis: 'y',
-            data: { labels: ['Persone', 'Pianeta', 'Prosperità', 'Pace'], datasets: [{ data: [0, 0, 0, 0], backgroundColor: ['#e91e63', '#4caf50', '#ff9800', '#9c27b0'] }] },
+            data: { labels: ['Persone', 'Pianeta', 'Prosperità', 'Pace'], datasets: [{ data: [dati.q4per, dati.q4pia, dati.q4pro, dati.q4pac], backgroundColor: ['#e91e63', '#4caf50', '#ff9800', '#9c27b0'] }] },
             options: { ...chartOptions, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true } } }
         });
-
-        // === FETCH CONTINUO DA risposte.csv ===
-        async function loadCSV() {
-            try {
-                const response = await fetch('./risposte.csv?t=' + Date.now());
-                if (!response.ok) return;
-                
-                const csv = await response.text();
-                const rows = csv.trim().split('\n').slice(1);
-
-                let q1si=0, q1no=0, q2low=0, q2mid=0, q2high=0, q3si=0, q3no=0;
-                let q4per=0, q4pia=0, q4pro=0, q4pac=0;
-
-                rows.forEach(row => {
-                    if (!row.trim()) return;
-                    const cols = row.split('","').map(c => c.replace(/^"|"$/g, '').trim());
-                    
-                    const d1 = cols[1] || '';
-                    const d2 = cols[2] || '';
-                    const d3 = cols[3] || '';
-                    const d4 = cols[4] || '';
-
-                    if (d1.toLowerCase() === 'si') q1si++;
-                    else if (d1.toLowerCase() === 'no') q1no++;
-
-                    const num = parseInt(d2);
-                    if (!isNaN(num)) {
-                        if (num <= 5) q2low++;
-                        else if (num <= 11) q2mid++;
-                        else q2high++;
-                    }
-
-                    if (d3.toLowerCase() === 'si') q3si++;
-                    else if (d3.toLowerCase() === 'no') q3no++;
-
-                    if (d4 === 'Persone') q4per++;
-                    else if (d4 === 'Pianeta') q4pia++;
-                    else if (d4 === 'Prosperità') q4pro++;
-                    else if (d4 === 'Pace') q4pac++;
-                });
-
-                chart1.data.datasets[0].data = [q1si, q1no];
-                chart2.data.datasets[0].data = [q2low, q2mid, q2high];
-                chart3.data.datasets[0].data = [q3si, q3no];
-                chart4.data.datasets[0].data = [q4per, q4pia, q4pro, q4pac];
-
-                chart1.update();
-                chart2.update();
-                chart3.update();
-                chart4.update();
-            } catch(e) {
-                console.error("Errore CSV:", e);
-            }
-        }
-
-        // Avvio e aggiornamento automatico
-        loadCSV();
-        setInterval(loadCSV, 1000);   // ogni 4 secondi
     </script>
 </body>
 </html>
