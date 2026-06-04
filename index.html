@@ -9,14 +9,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
 
+    <style>
+        * { box-sizing: border-box; }
         body {
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             background-color: #f0f4f1;
             font-family: 'Open Sans', sans-serif;
             overflow: hidden;
@@ -25,7 +22,6 @@
             justify-content: center;
             align-items: center;
         }
-
         .presentation-container {
             width: 1280px;
             height: 720px;
@@ -37,7 +33,6 @@
             flex-direction: column;
             position: relative;
         }
-
         .slide-container {
             flex-grow: 1;
             width: 100%;
@@ -47,12 +42,7 @@
             position: relative;
             overflow: hidden;
         }
-
-        .slide-container.active {
-            display: flex;
-            flex-direction: column;
-        }
-
+        .slide-container.active { display: flex; flex-direction: column; }
         .slide-title {
             font-family: 'Montserrat', sans-serif;
             font-size: 36px;
@@ -62,7 +52,6 @@
             border-left: 8px solid #81c784;
             padding-left: 20px;
         }
-
         .content-area {
             flex-grow: 1;
             display: flex;
@@ -72,7 +61,6 @@
             height: 100%;
             overflow: hidden;
         }
-
         .title-layout {
             background: linear-gradient(135deg, #1b5e20 0%, #388e3c 100%);
             color: white;
@@ -80,33 +68,10 @@
             justify-content: center;
             text-align: center;
         }
-
-        .title-layout h1 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 64px;
-            margin: 0;
-        }
-
-        .title-layout p {
-            font-size: 22px;
-            margin-top: 15px;
-            opacity: 0.9;
-        }
-
-        .two-column {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            align-items: center;
-            width: 100%;
-        }
-
-        .tiled-content {
-            display: flex;
-            gap: 20px;
-            width: 100%;
-        }
-
+        .title-layout h1 { font-family: 'Montserrat', sans-serif; font-size: 64px; margin: 0; }
+        .title-layout p { font-size: 22px; margin-top: 15px; opacity: 0.9; }
+        .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; width: 100%; }
+        .tiled-content { display: flex; gap: 20px; width: 100%; }
         .tile {
             flex: 1;
             background-color: #f9fbf9;
@@ -116,52 +81,23 @@
             display: flex;
             flex-direction: column;
         }
-
-        .tile .icon {
-            font-size: 36px;
-            color: #2e7d32;
-            margin-bottom: 10px;
-        }
-
-        .tile h3 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 20px;
-            margin: 0 0 10px 0;
-            color: #1b5e20;
-        }
-
-        .tile p {
-            font-size: 14px;
-            line-height: 1.4;
-            color: #455a64;
-            margin: 0;
-        }
-
-        .table-layout {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
+        .tile .icon { font-size: 36px; color: #2e7d32; margin-bottom: 10px; }
+        .tile h3 { font-family: 'Montserrat', sans-serif; font-size: 20px; margin: 0 0 10px 0; color: #1b5e20; }
+        .tile p { font-size: 14px; line-height: 1.4; color: #455a64; margin: 0; }
+        .table-layout { width: 100%; border-collapse: collapse; }
         .table-layout th, .table-layout td {
             text-align: left;
             padding: 12px 15px;
             border-bottom: 1px solid #e0e0e0;
             font-size: 15px;
         }
-
         .table-layout th {
             background-color: #e8f5e9;
             color: #1b5e20;
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
         }
-
-        .bullet-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
+        .bullet-list { list-style: none; padding: 0; margin: 0; }
         .bullet-list li {
             position: relative;
             padding-left: 45px;
@@ -169,7 +105,6 @@
             font-size: 18px;
             color: #37474f;
         }
-
         .bullet-list li i {
             position: absolute;
             left: 0;
@@ -177,96 +112,37 @@
             color: #2e7d32;
             font-size: 22px;
         }
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 320px 1fr;
-            gap: 20px;
-            height: 100%;
-            overflow: hidden;
-        }
-
-        .input-panel {
-            background-color: #fff;
-            border: 1px solid #e0e0e0;
-            border-radius: 12px;
-            padding: 15px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            height: 100%;
-        }
-
-        .question-group {
-            background: #f1f8f1;
-            padding: 10px;
-            border-radius: 8px;
-            border-left: 4px solid #1b5e20;
-        }
-
-        .question-group h4 {
-            font-size: 11px;
-            color: #1b5e20;
-            margin: 0 0 6px 0;
-            text-transform: uppercase;
-        }
-
-        .input-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 4px;
-        }
-
-        .input-item label {
-            font-size: 11px;
-            color: #455a64;
-        }
-
-        .input-item input {
-            width: 55px;
-            padding: 3px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            text-align: center;
-            font-weight: 700;
-            font-size: 12px;
-        }
-
         .charts-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
             grid-template-rows: 1fr 1fr;
-            gap: 15px;
+            gap: 20px;
             height: 100%;
+            width: 100%;
         }
-
         .chart-box {
             background: #fff;
             border: 1px solid #f0f0f0;
             border-radius: 12px;
-            padding: 10px;
+            padding: 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100%;
         }
-
         .chart-box h5 {
-            margin: 0 0 5px 0;
-            font-size: 12px;
+            margin: 0 0 10px 0;
+            font-size: 14px;
             color: #37474f;
             text-align: center;
+            font-weight: 600;
         }
-
         .canvas-wrapper {
             position: relative;
             width: 100%;
-            height: 170px;
+            height: 100%;
+            flex-grow: 1;
         }
-
         .navigation-footer {
             height: 80px;
             background-color: #f8f9fa;
@@ -280,7 +156,6 @@
             left: 0;
             width: 100%;
         }
-
         .nav-btn {
             background-color: #1b5e20;
             color: white;
@@ -296,21 +171,12 @@
             gap: 10px;
             font-size: 16px;
         }
-
-        .nav-btn:hover {
-            background-color: #2e7d32;
-        }
-
+        .nav-btn:hover { background-color: #2e7d32; }
         .nav-btn:disabled {
             background-color: #b0bec5;
             cursor: not-allowed;
         }
-
-        .progress-indicator {
-            display: flex;
-            gap: 10px;
-        }
-
+        .progress-indicator { display: flex; gap: 10px; }
         .progress-dot {
             width: 12px;
             height: 12px;
@@ -318,7 +184,6 @@
             border-radius: 50%;
             transition: all 0.3s;
         }
-
         .progress-dot.active {
             background-color: #1b5e20;
             transform: scale(1.3);
@@ -372,7 +237,7 @@
                     <div class="tile">
                         <div class="icon"><i class="fa-solid fa-earth-americas"></i></div>
                         <h3>Pianeta</h3>
-                        <p>Proteggere attivamente las risorse naturali, gli ecosistemi terrestri, marini e il clima globale.</p>
+                        <p>Proteggere attivamente le risorse naturali, gli ecosistemi terrestri, marini e il clima globale.</p>
                     </div>
                 </div>
                 <div class="tiled-content" style="margin-top: 20px;">
@@ -421,7 +286,7 @@
                         <tr>
                             <td>Istruzione e Formazione</td>
                             <td style="color: #c62828; font-weight: 600;"><i class="fa-solid fa-circle-down"></i> Critico</td>
-                            <td>Tasso di abbandono scolastico superior alla media UE.</td>
+                            <td>Tasso di abbandono scolastico superiore alla media UE.</td>
                         </tr>
                     </tbody>
                 </table>
@@ -436,57 +301,31 @@
                     <li><i class="fa-solid fa-circle-question"></i> <strong>Domanda 1:</strong> Pensi che la lotta al cambiamento stia funzionando o no?</li>
                     <li><i class="fa-solid fa-circle-question"></i> <strong>Domanda 2:</strong> Quanti obiettivi pensi che l'Italia riesca a completare entro il 2030?</li>
                     <li><i class="fa-solid fa-circle-question"></i> <strong>Domanda 3:</strong> Sei a conoscenza degli obiettivi dell'agenda 2030?</li>
-                    <li><i class="fa-solid fa-circle-question"></i> <strong>Domanda 4:</strong> Quale tra le macroareas dell'agenda 2030 pensi sia più importante?</li>
+                    <li><i class="fa-solid fa-circle-question"></i> <strong>Domanda 4:</strong> Quale tra le macroaree dell'agenda 2030 pensi sia più importante?</li>
                 </ul>
             </div>
         </div>
 
+        <!-- Dashboard a schermo intero -->
         <div class="slide-container" id="slide6">
-            <h2 class="slide-title">Dashboard di Votazione Live</h2>
-            <div class="content-area">
-                <div class="dashboard-grid">
-                    <div class="input-panel">
-                        <div class="question-group">
-                            <h4>1. Lotta al Cambiamento</h4>
-                            <div class="input-item"><label>Sì, funziona:</label><input type="number" id="q1-si" value="0" oninput="updateAll()"></div>
-                            <div class="input-item"><label>No, non funziona:</label><input type="number" id="q1-no" value="0" oninput="updateAll()"></div>
-                        </div>
-                        <div class="question-group" style="border-left-color: #ffb300;">
-                            <h4>2. Target Completati Italia</h4>
-                            <div class="input-item"><label>Pochi (0-5):</label><input type="number" id="q2-low" value="0" oninput="updateAll()"></div>
-                            <div class="input-item"><label>Medi (6-11):</label><input type="number" id="q2-mid" value="0" oninput="updateAll()"></div>
-                            <div class="input-item"><label>Tanti (12-17):</label><input type="number" id="q2-high" value="0" oninput="updateAll()"></div>
-                        </div>
-                        <div class="question-group" style="border-left-color: #03a9f4;">
-                            <h4>3. Conoscenza Agenda</h4>
-                            <div class="input-item"><label>Sì, li conosco:</label><input type="number" id="q3-si" value="0" oninput="updateAll()"></div>
-                            <div class="input-item"><label>No, non li conosco:</label><input type="number" id="q3-no" value="0" oninput="updateAll()"></div>
-                        </div>
-                        <div class="question-group" style="border-left-color: #9c27b0;">
-                            <h4>4. Macroarea più Importante</h4>
-                            <div class="input-item"><label>Persone:</label><input type="number" id="q4-per" value="0" oninput="updateAll()"></div>
-                            <div class="input-item"><label>Pianeta:</label><input type="number" id="q4-pia" value="0" oninput="updateAll()"></div>
-                            <div class="input-item"><label>Prosperità:</label><input type="number" id="q4-pro" value="0" oninput="updateAll()"></div>
-                            <div class="input-item"><label>Pace:</label><input type="number" id="q4-pac" value="0" oninput="updateAll()"></div>
-                        </div>
+            <h2 class="slide-title">Dashboard di Votazione</h2>
+            <div class="content-area" style="padding: 20px 40px 40px;">
+                <div class="charts-container">
+                    <div class="chart-box">
+                        <h5>La lotta funziona? (D1)</h5>
+                        <div class="canvas-wrapper"><canvas id="chart1"></canvas></div>
                     </div>
-                    <div class="charts-container">
-                        <div class="chart-box">
-                            <h5>La lotta funziona? (D1)</h5>
-                            <div class="canvas-wrapper"><canvas id="chart1"></canvas></div>
-                        </div>
-                        <div class="chart-box">
-                            <h5>Obiettivi Italia al 2030 (D2)</h5>
-                            <div class="canvas-wrapper"><canvas id="chart2"></canvas></div>
-                        </div>
-                        <div class="chart-box">
-                            <h5>Conoscenza dei Goal (D3)</h5>
-                            <div class="canvas-wrapper"><canvas id="chart3"></canvas></div>
-                        </div>
-                        <div class="chart-box">
-                            <h5>Priorità delle Macroaree (D4)</h5>
-                            <div class="canvas-wrapper"><canvas id="chart4"></canvas></div>
-                        </div>
+                    <div class="chart-box">
+                        <h5>Obiettivi Italia al 2030 (D2)</h5>
+                        <div class="canvas-wrapper"><canvas id="chart2"></canvas></div>
+                    </div>
+                    <div class="chart-box">
+                        <h5>Conoscenza dei Goal (D3)</h5>
+                        <div class="canvas-wrapper"><canvas id="chart3"></canvas></div>
+                    </div>
+                    <div class="chart-box">
+                        <h5>Priorità delle Macroaree (D4)</h5>
+                        <div class="canvas-wrapper"><canvas id="chart4"></canvas></div>
                     </div>
                 </div>
             </div>
@@ -507,6 +346,14 @@
     </div>
 
     <script>
+        // === DATI FISSI - AGGIORNA QUI ===
+        const dati = {
+            q1si: 2, q1no: 0,
+            q2low: 1, q2mid: 0, q2high: 0,
+            q3si: 1, q3no: 0,
+            q4per: 0, q4pia: 0, q4pro: 0, q4pac: 1
+        };
+
         let currentSlide = 1;
         const totalSlides = 7;
 
@@ -523,6 +370,8 @@
             document.getElementById(`dot-${currentSlide}`).classList.remove('active');
             
             currentSlide += direction;
+            if (currentSlide < 1) currentSlide = 1;
+            if (currentSlide > totalSlides) currentSlide = totalSlides;
             
             document.getElementById(`slide${currentSlide}`).classList.add('active');
             document.getElementById(`dot-${currentSlide}`).classList.add('active');
@@ -534,52 +383,33 @@
         const chartOptions = {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } }
+            plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } }
         };
 
         const chart1 = new Chart(document.getElementById('chart1').getContext('2d'), {
             type: 'pie',
-            data: { labels: ['Sì', 'No'], datasets: [{ data: [0, 0], backgroundColor: ['#2ecc71', '#e74c3c'] }] },
+            data: { labels: ['Sì', 'No'], datasets: [{ data: [dati.q1si, dati.q1no], backgroundColor: ['#2ecc71', '#e74c3c'] }] },
             options: chartOptions
         });
 
         const chart2 = new Chart(document.getElementById('chart2').getContext('2d'), {
             type: 'bar',
-            data: { labels: ['0-5', '6-11', '12-17'], datasets: [{ data: [0, 0, 0], backgroundColor: '#ffb300' }] },
-            options: { ...chartOptions, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+            data: { labels: ['0-5', '6-11', '12-17'], datasets: [{ data: [dati.q2low, dati.q2mid, dati.q2high], backgroundColor: '#ffb300' }] },
+            options: { ...chartOptions, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
         });
 
         const chart3 = new Chart(document.getElementById('chart3').getContext('2d'), {
             type: 'doughnut',
-            data: { labels: ['Sì', 'No'], datasets: [{ data: [0, 0], backgroundColor: ['#03a9f4', '#b0bec5'] }] },
+            data: { labels: ['Sì', 'No'], datasets: [{ data: [dati.q3si, dati.q3no], backgroundColor: ['#03a9f4', '#b0bec5'] }] },
             options: chartOptions
         });
 
         const chart4 = new Chart(document.getElementById('chart4').getContext('2d'), {
             type: 'bar',
             indexAxis: 'y',
-            data: { labels: ['Persone', 'Pianeta', 'Prosperità', 'Pace'], datasets: [{ data: [0, 0, 0, 0], backgroundColor: ['#e91e63', '#4caf50', '#ff9800', '#9c27b0'] }] },
-            options: { ...chartOptions, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+            data: { labels: ['Persone', 'Pianeta', 'Prosperità', 'Pace'], datasets: [{ data: [dati.q4per, dati.q4pia, dati.q4pro, dati.q4pac], backgroundColor: ['#e91e63', '#4caf50', '#ff9800', '#9c27b0'] }] },
+            options: { ...chartOptions, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true } } }
         });
-
-        function updateAll() {
-            chart1.data.datasets[0].data = [Number(document.getElementById('q1-si').value) || 0, Number(document.getElementById('q1-no').value) || 0];
-            chart1.update();
-
-            chart2.data.datasets[0].data = [Number(document.getElementById('q2-low').value) || 0, Number(document.getElementById('q2-mid').value) || 0, Number(document.getElementById('q2-high').value) || 0];
-            chart2.update();
-
-            chart3.data.datasets[0].data = [Number(document.getElementById('q3-si').value) || 0, Number(document.getElementById('q3-no').value) || 0];
-            chart3.update();
-
-            chart4.data.datasets[0].data = [
-                Number(document.getElementById('q4-per').value) || 0,
-                Number(document.getElementById('q4-pia').value) || 0,
-                Number(document.getElementById('q4-pro').value) || 0,
-                Number(document.getElementById('q4-pac').value) || 0
-            ];
-            chart4.update();
-        }
     </script>
 </body>
 </html>
